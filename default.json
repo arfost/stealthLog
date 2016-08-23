@@ -1,19 +1,25 @@
 {
-    'writers':[
+    "writers":[
         {
-            'type':'txtFile'
-            'name':'fileLog'
+            "name":"fileLog",
+            "conf":{
+              "writeMethod":{"type":"basic:fileWriter"},
+              "formatter":{"type":"basic:simpleFormatter"}
+            }
         },{
-            'type':'txtFile'
-            'name':'console'
+            "name":"consoleLog",
+            "conf":{
+              "writeMethod":{"type":"basic:consoleWriter"},
+              "formatter":{"type":"basic:simpleFormatter"}
+            }
         }
     ],
-    'level':[
-        'DEBUG',
-        'LOG',
-        'ERROR'
+    "level":[
+        "DEBUG",
+        "LOG",
+        "ERROR"
     ],
-    'blackListName':[
-        'anti'
+    "blackListName":[
+        "anti"
     ]
 }

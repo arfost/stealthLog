@@ -3,7 +3,6 @@
 var writerPool = new Map();
 
 var getNewLogger = function(name, confFile){
-    console.log('general writerPoll',writerPool);
   return new Logger(name, confFile, writerPool);
 }
 
@@ -16,11 +15,10 @@ var defaultConfFile = './default.json';
 class Logger{
 
   constructor(name, confFile, writerPool){
-      
+
     this.name = name;
     this.writerPool = writerPool;
-    console.log('TESTTESTTEST',this.writerPool, writerPool);
-    
+
     if (confFile === undefined || confFile === null){
       confFile = defaultConfFile;
     }
@@ -31,78 +29,65 @@ class Logger{
       console.log("Unable to open conf file, using default one", err);
       this.conf = require(defaultConfFile);
     }
-    
+
   }
 
   log(){
-    console.log(this.name, this.writerPool);
+    if(this.conf.level.includes('LOG') && !this.conf.blackListName.includes(this.name))
+        this.logToWriters(arguments);
   }
-  
-  warn(val){
-      this.writerPool.test = val;
+
+  warn(){
+    if(this.conf.level.includes('WARN') && !this.conf.blackListName.includes(this.name))
+        this.logToWriters(arguments);
   }
-  
+
   error(){
-      
+    if(this.conf.level.includes('ERROR') && !this.conf.blackListName.includes(this.name))
+      this.logToWriters(arguments);
   }
-  
+
   info(){
-      if(this.conf.level.contains('INFO') && this.conf.blackListName.contains(this.name)){
-          for(var writer of this.conf.writers){
-              var realWriter = this.writerPool.get(writer.name);
-              if(realWriter === undefined){
-                  realWriter = getNewWriter(writer.type, writer.name);
-                  this.writerPool.set(this.name, realWriter);
-              }
-          
-              realWriter.write(this.name, arguments);
-          }
-          
-      }
+      if(this.conf.level.includes('INFO') && !this.conf.blackListName.includes(this.name))
+        this.logToWriters(arguments);
+  }
+
+  logToWriters(toLog){
+    for(var writer of this.conf.writers){
+        var realWriter = this.writerPool.get(writer.name);
+        //console.log(realWriter);
+        if(realWriter === undefined){
+            realWriter = getNewWriter(writer.conf);
+            this.writerPool.set(writer.name, realWriter);
+        }
+        realWriter.write(this.name, toLog);
+    }
   }
 }
 
-var getNewWriter = function(type){
-    var writer;
-    if('txtFile' == type){
-        
-    }
-    
-    return writer;
+var getNewWriter = function(conf){
+    return new Writer(conf);
 }
 
-class fileWriter{
-    
-    constructor(name){
-        var fs = require('fs');
-        this.ready = false;
-        this.stream = fs.createWriteSteam(name+'.txt');
-        this.stream.once('open',this.setReady(true));
-    }
-    
-    setReady(state){
-        this.ready = state;
-    }
-    
-    write(intro, toLog){
-        if(readyState)
-            this.stream.write(intro+' :: '+JSON.stringify(toLog, null, 4)+'\n');
-        else
-            console.log('file not ready');
-    }
-}
+var typeLoggerLoader = require('./typeLogger/typeLoggerLoader.js');
 
-class consoleWriter{
-    
-    constructor(name){
+class Writer{
+  constructor(conf){
+    this.writeMethod = typeLoggerLoader('writeType', conf.writeMethod.type);
+    this.formatter = typeLoggerLoader('formatter', conf.formatter.type);
 
-    }
-    
-    setReady(state){
-        this.ready = state;
-    }
-    
-    write(intro, toLog){
-        console.log(intro+' :: '+JSON.stringify(toLog, null, 4)+'\n');
-    }
+    this.writeConf = this.writeMethod.init(conf.writeMethod);
+    this.formatterConf = this.formatter.init(conf.formatter);
+
+  }
+
+  write(intro, toLog){
+    //console.log('writer args send : \n', intro, toLog)
+    this.writeMethod.write(this.writeConf, this.format(intro, toLog));
+  }
+
+  format(intro, toFormat){
+    //console.log('formatter args send : \n', this.formatterConf);
+    return this.formatter.format(this.formatterConf, intro, toFormat);
+  }
 }
