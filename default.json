@@ -1,0 +1,19 @@
+{
+    'writers':[
+        {
+            'type':'txtFile'
+            'name':'fileLog'
+        },{
+            'type':'txtFile'
+            'name':'console'
+        }
+    ],
+    'level':[
+        'DEBUG',
+        'LOG',
+        'ERROR'
+    ],
+    'blackListName':[
+        'anti'
+    ]
+}
