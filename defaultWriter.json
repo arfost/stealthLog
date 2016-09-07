@@ -1,0 +1,15 @@
+[
+    {
+        "name":"fileLog",
+        "conf":{
+          "writeMethod":{"type":"basic:fileWriter"},
+          "formatter":{"type":"basic:simpleFormatter"}
+        }
+    },{
+        "name":"consoleLog",
+        "conf":{
+          "writeMethod":{"type":"basic:consoleWriter"},
+          "formatter":{"type":"basic:simpleFormatter"}
+        }
+    }
+]
