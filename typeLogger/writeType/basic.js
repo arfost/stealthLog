@@ -1,28 +1,28 @@
 var modules = {
   "fileWriter" : {
-    init : function(){
-      var conf = {};
-      console.log('new file writer : ');
+    init : function(initConf){
+      var conf = initConf;
+      //console.log('new file writer : ');
       var fs = require('fs');
-      conf.ready = false;
-      conf.stream = fs.createWriteStream('defaultLogFile'+'.txt');
-      conf.stream.once('open',function(fd){
-        console.log('file ready');
-        conf.ready = true;
-      });
+      if(conf.file === undefined){
+        conf.file = 'defaultLogFile'
+      }
+      conf.fs = fs;
       return conf;
     },
     write : function(conf, txt){
-      if(true)
-          conf.stream.write(txt);
-      else
-          console.log('file not ready');
+        conf.fs.appendFile(conf.file+'.log', txt, function (err) {
+          if(err != null){
+            console.log(err);
+          }
+        });
+      }
     }
   },
   "consoleWriter" : {
-    init : function(){
-      console.log('new console writer : ');
-      return {};
+    init : function(initConf){
+      //console.log('new console writer : ');
+      return initConf;
     },
     write : function(conf, txt){
       console.log(txt);

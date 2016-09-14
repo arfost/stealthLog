@@ -11,6 +11,8 @@
       ],
       "blackListName":[
           "anti"
-      ]
+      ],
+      "logTime":true,
+      "logLvl":false
     }
 }

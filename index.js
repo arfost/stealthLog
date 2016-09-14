@@ -51,26 +51,37 @@ class Logger{
   }
 
   log(){
-    if(this.conf.level.indexOf('LOG') != -1 && !this.conf.blackListName.indexOf(this.name) != -1)
-        this.logToWriters(arguments);
+    if(this.conf.level.indexOf('LOG') != -1 && !this.conf.blackListName.indexOf(this.name) != -1){
+      this.logToWriters(arguments, 'LOG');
+    }
   }
 
   warn(){
-    if(this.conf.level.indexOf('WARN')  != -1 && !this.conf.blackListName.indexOf(this.name) != -1)
-        this.logToWriters(arguments);
+    if(this.conf.level.indexOf('WARN')  != -1 && !this.conf.blackListName.indexOf(this.name) != -1){
+      this.logToWriters(arguments, 'WARN');
+    }
   }
 
   error(){
-    if(this.conf.level.indexOf('ERROR')  != -1 && !this.conf.blackListName.indexOf(this.name) != -1)
-      this.logToWriters(arguments);
+    if(this.conf.level.indexOf('ERROR')  != -1 && !this.conf.blackListName.indexOf(this.name) != -1){
+      this.logToWriters(arguments, 'ERROR');
+    }
   }
 
   info(){
-      if(this.conf.level.indexOf('INFO')  != -1 && !this.conf.blackListName.indexOf(this.name) != -1)
-        this.logToWriters(arguments);
+      if(this.conf.level.indexOf('INFO')  != -1 && !this.conf.blackListName.indexOf(this.name) != -1){
+        this.logToWriters(arguments, 'INFO');
+      }
   }
 
-  logToWriters(toLog){
+  logToWriters(toLog, lvl){
+    var intro = this.name;
+    if(this.conf.logTime == true){
+      intro = intro + ", " + new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
+    }
+    if(this.conf.logLvl == true){
+      intro = intro + " [" + lvl + "]";
+    }
     for(var writer of this.conf.writers){
         var realWriter = this.writerPool.get(writer);
         //console.log(writer, realWriter, writerPool);
@@ -78,7 +89,7 @@ class Logger{
             realWriter = getNewWriter(writer);
             this.writerPool.set(writer, realWriter);
         }
-        realWriter.write(this.name, toLog);
+        realWriter.write(intro, toLog);
     }
   }
 }
