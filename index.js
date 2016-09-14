@@ -6,12 +6,14 @@ var jsonWriter = new Map();
 var tmpJsonWrite = require('./defaultWriter.json');
 
 var addToJsonWriterPool = function(json){
-  for(var writer in json){
-    this.jsonWriter.set(writer.name, writer);
+  for(var writer of json){
+    jsonWriter.set(writer.name, writer.conf);
   }
 }
 
-var getNewLogger = function(name, confFile){
+addToJsonWriterPool(tmpJsonWrite);
+
+var getNewLogger = function(name, confFile, confName){
   return new Logger(name, confFile, confName, writerPool);
 }
 
@@ -31,22 +33,21 @@ class Logger{
     }
     var confFile;
     try{
-      conf = require(confFile);
+      confFile = require(confFile);
     }catch(err){
       console.log("Unable to open conf file, using default one", err);
-      conf = require(defaultConfFile);
+      confFile = require(defaultConfFile);
     }
     if(confFile.customWriters != undefined){
       addToJsonWriterPool(confFile.customWriters);
     }
     if(confName != undefined){
-      this.conf = conf[confName];
+      this.conf = confFile[confName];
       if(this.conf == undefined)
-        this.conf = conf[0];
+        this.conf = confFile[Object.keys(confFile)[0]];
     }else{
-      this.conf = conf[0];
+      this.conf = confFile[Object.keys(confFile)[0]];
     }
-
   }
 
   log(){
@@ -70,12 +71,12 @@ class Logger{
   }
 
   logToWriters(toLog){
-    for(var writer in this.conf.writers){
+    for(var writer of this.conf.writers){
         var realWriter = this.writerPool.get(writer);
-        //console.log(realWriter);
+        //console.log(writer, realWriter, writerPool);
         if(realWriter === undefined){
             realWriter = getNewWriter(writer);
-            this.writerPool.set(writer.name, realWriter);
+            this.writerPool.set(writer, realWriter);
         }
         realWriter.write(this.name, toLog);
     }
@@ -83,6 +84,7 @@ class Logger{
 }
 
 var getNewWriter = function(name){
+  //console.log(jsonWriter, name, jsonWriter.get(name));
     return new Writer(jsonWriter.get(name));
 }
 
