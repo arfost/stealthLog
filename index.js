@@ -28,7 +28,7 @@ class Logger{
     this.name = name;
     this.writerPool = writerPool;
 
-    if (confFile === undefined || confFile === null){
+    if (confFile === undefined || confFile === null || confFile == ''){
       confFile = defaultConfFile;
     }
     var confFile;
@@ -75,12 +75,13 @@ class Logger{
   }
 
   logToWriters(toLog, lvl){
-    var intro = this.name;
+    var intro = {};
+    intro.name = this.name;
     if(this.conf.logTime == true){
-      intro = intro + ", " + new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
+      intro.time = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
     }
     if(this.conf.logLvl == true){
-      intro = intro + " [" + lvl + "]";
+      intro.level =  "[" + lvl + "]";
     }
     for(var writer of this.conf.writers){
         var realWriter = this.writerPool.get(writer);
@@ -108,7 +109,7 @@ class Writer{
     this.formatter = typeLoggerLoader('formatter', conf.formatter.type);
 
     this.writeConf = this.writeMethod.init(conf.writeMethod);
-    this.formatterConf = this.formatter.init(conf.formatter);
+    this.formatterConf = this.formatter.init(conf.formatter, conf.writeMethod.type);
 
   }
 

@@ -13,6 +13,6 @@
           "anti"
       ],
       "logTime":true,
-      "logLvl":false
+      "logLvl":true
     }
 }

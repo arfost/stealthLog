@@ -5,18 +5,18 @@ var modules = {
       //console.log('new file writer : ');
       var fs = require('fs');
       if(conf.file === undefined){
-        conf.file = 'defaultLogFile'
+        //console.log('/////////////////////////////////////////////////////////////////////////////////////////')
+        conf.file = 'defaultLogFile.log'
       }
       conf.fs = fs;
       return conf;
     },
     write : function(conf, txt){
-        conf.fs.appendFile(conf.file+'.log', txt, function (err) {
-          if(err != null){
-            console.log(err);
-          }
-        });
-      }
+      conf.fs.appendFile(conf.file, txt, function (err) {
+        if(err != null){
+          console.log(err);
+        }
+      });
     }
   },
   "consoleWriter" : {

@@ -2,7 +2,9 @@
     {
         "name":"fileLog",
         "conf":{
-          "writeMethod":{"type":"basic:fileWriter"},
+            "writeMethod":{"type":"basic:fileWriter",
+            "file":"test.log"
+          },
           "formatter":{"type":"basic:simpleFormatter"}
         }
     },{

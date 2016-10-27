@@ -13,7 +13,7 @@ var logger4 = test2.getNewLogger('T2L2');
 logger2.log('something something');
 logger.warn('something else, with an object', {'name':'i\'m an object', 'prop':34});
 logger.log('something something');
-logger2.log('something else, with an object', {'name':'i\'m an object', 'prop':34});
+logger2.log('something else, with an object', {'name':'i\'m an object', 'prop':34}, 'and a phrase');
 
 logger3.log('something else, with an object', logger2);
 logger4.error('something else, with an object', {'name':'i\'m an object', 'prop':34});
