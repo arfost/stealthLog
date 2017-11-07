@@ -51,25 +51,25 @@ class Logger{
   }
 
   log(){
-    if(this.conf.level.indexOf('LOG') != -1 && !this.conf.blackListName.indexOf(this.name) != -1){
+    if(this.conf.level.indexOf('LOG') != -1 && this.conf.blackListName.indexOf(this.name) === -1){
       this.logToWriters(arguments, 'LOG');
     }
   }
 
   warn(){
-    if(this.conf.level.indexOf('WARN')  != -1 && !this.conf.blackListName.indexOf(this.name) != -1){
+    if(this.conf.level.indexOf('WARN')  != -1 && this.conf.blackListName.indexOf(this.name) === -1){
       this.logToWriters(arguments, 'WARN');
     }
   }
 
   error(){
-    if(this.conf.level.indexOf('ERROR')  != -1 && !this.conf.blackListName.indexOf(this.name) != -1){
+    if(this.conf.level.indexOf('ERROR')  != -1 && this.conf.blackListName.indexOf(this.name) === -1){
       this.logToWriters(arguments, 'ERROR');
     }
   }
 
   info(){
-      if(this.conf.level.indexOf('INFO')  != -1 && !this.conf.blackListName.indexOf(this.name) != -1){
+      if(this.conf.level.indexOf('INFO')  != -1 && this.conf.blackListName.indexOf(this.name) === -1){
         this.logToWriters(arguments, 'INFO');
       }
   }
