@@ -3,7 +3,7 @@
         "name":"fileLog",
         "conf":{
             "writeMethod":{"type":"basic:fileWriter",
-            "file":"test.log"
+            "file":"logFile.log"
           },
           "formatter":{"type":"basic:simpleFormatter"}
         }
