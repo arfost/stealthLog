@@ -1,17 +1,16 @@
 {
-    "testLogger":{
+    "defaultLogger":{
       "writers":[
         "fileLog",
         "consoleLog"
       ],
       "level":[
-          "DEBUG",
+          "INFO",
           "LOG",
-          "ERROR"
+          "ERROR",
+          "WARN"
       ],
-      "blackListName":[
-          "anti"
-      ],
+      "blackListName":[],
       "logTime":true,
       "logLvl":true
     }
