@@ -1,6 +1,6 @@
 {
   "name": "stealthlog",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "a simple nodeJS logger",
   "main": "index.js",
   "scripts": {
